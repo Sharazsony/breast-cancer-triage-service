@@ -1,0 +1,45 @@
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ sed -i 's/n_estimators: 200/n_estimators: 300/' params.yaml && dvc params diff
+Path         Param                              HEAD    workspace
+params.yaml  models.random_forest.n_estimators  200     300
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ dvc status
+train:
+	changed deps:
+		params.yaml:
+			modified:           models
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ dvc repro
+'data/raw/breast_cancer.csv.dvc' didn't change, skipping
+Running stage 'train':
+> python -m training.train --data-path data/raw/breast_cancer.csv --output-dir artifacts --model-version 1.0.0
+Loaded 539 rows, 30 features, 206 malignant
+
+model                  cv_recall   cv_acc   cv_auc  test_recall  test_acc  test_auc
+logistic_regression       0.9697   0.9791   0.9934       0.9512    0.9722    0.9985  <== selected
+random_forest             0.9273   0.9536   0.9858       0.8780    0.9537    0.9975
+
+Saved artifacts/model.joblib, model_card.json and metrics.json (version 1.0.0, sklearn 1.7.2)
+PASS: test malignant recall 0.9512 >= 0.95
+Updating lock file 'dvc.lock'
+
+To track the changes with git, run:
+
+	git add dvc.lock
+
+To enable auto staging, run:
+
+	dvc config core.autostage true
+Use `dvc push` to send your updates to remote storage.
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ dvc metrics diff
+Path                    Metric                                        HEAD    workspace    Change
+artifacts/metrics.json  candidates.random_forest.cv.accuracy          0.9605  0.9536       -0.0069
+artifacts/metrics.json  candidates.random_forest.cv.recall_malignant  0.9333  0.9273       -0.006
+artifacts/metrics.json  candidates.random_forest.cv.roc_auc           0.9866  0.9858       -0.0008
+artifacts/metrics.json  candidates.random_forest.test.roc_auc         0.9982  0.9975       -0.0007
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ git diff --stat
+ dvc.lock    | 4 ++--
+ params.yaml | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+

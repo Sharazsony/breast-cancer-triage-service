@@ -23,7 +23,7 @@ stages:
             max_iter: 1000
             class_weight: balanced
           random_forest:
-            n_estimators: 200
+            n_estimators: 300
             max_depth: 8
             class_weight: balanced
         seed: 42
@@ -31,7 +31,7 @@ stages:
     outs:
     - path: artifacts/metrics.json
       hash: md5
-      md5: bc283d994d44aade0ffda5722794c77a
+      md5: da3e63bd5f8427287bd085e6f11b272a
       size: 675
     - path: artifacts/model.joblib
       hash: md5

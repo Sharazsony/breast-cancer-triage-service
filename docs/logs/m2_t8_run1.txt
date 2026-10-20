@@ -1,0 +1,32 @@
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ dvc repro
+'data/raw/breast_cancer.csv.dvc' didn't change, skipping
+Running stage 'train':
+> python -m training.train --data-path data/raw/breast_cancer.csv --output-dir artifacts --model-version 1.0.0
+Loaded 539 rows, 30 features, 206 malignant
+
+model                  cv_recall   cv_acc   cv_auc  test_recall  test_acc  test_auc
+logistic_regression       0.9697   0.9791   0.9934       0.9512    0.9722    0.9985  <== selected
+random_forest             0.9333   0.9605   0.9866       0.8780    0.9537    0.9982
+
+Saved artifacts/model.joblib, model_card.json and metrics.json (version 1.0.0, sklearn 1.7.2)
+PASS: test malignant recall 0.9512 >= 0.95
+Generating lock file 'dvc.lock'
+Updating lock file 'dvc.lock'
+
+To track the changes with git, run:
+
+	git add dvc.lock
+
+To enable auto staging, run:
+
+	dvc config core.autostage true
+Use `dvc push` to send your updates to remote storage.
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ git status --short dvc.lock dvc.yaml
+?? dvc.lock
+?? dvc.yaml
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ dvc metrics show
+Path                    candidates.logistic_regression.cv.accuracy    candidates.logistic_regression.cv.recall_malignant    candidates.logistic_regression.cv.roc_auc    candidates.logistic_regression.test.accuracy    candidates.logistic_regression.test.recall_malignant    candidates.logistic_regression.test.roc_auc    candidates.random_forest.cv.accuracy    candidates.random_forest.cv.recall_malignant    candidates.random_forest.cv.roc_auc    candidates.random_forest.test.accuracy    candidates.random_forest.test.recall_malignant    candidates.random_forest.test.roc_auc    selected             test.accuracy    test.recall_malignant    test.roc_auc
+artifacts/metrics.json  0.9791                                        0.9697                                                0.9934                                       0.9722                                          0.9512                                                  0.9985                                         0.9605                                  0.9333                                          0.9866                                 0.9537                                    0.878                                             0.9982                                   logistic_regression  0.9722           0.9512                   0.9985
+
