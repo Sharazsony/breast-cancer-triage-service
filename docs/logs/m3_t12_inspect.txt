@@ -1,0 +1,55 @@
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ docker image inspect sharaz123/breast-cancer-triage-api:1.0.0 --format 'User={{.Config.User}}  ExposedPorts={{json .Config.ExposedPorts}}'
+User=app  ExposedPorts={"8000/tcp":{}}
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ docker image inspect sharaz123/breast-cancer-triage-api:1.0.0 --format 'Entrypoint={{json .Config.Entrypoint}}  Cmd={{json .Config.Cmd}}'
+Entrypoint=["uvicorn"]  Cmd=["app.main:app","--host","0.0.0.0","--port","8000"]
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ docker image inspect sharaz123/breast-cancer-triage-api:1.0.0 --format '{{json .Config.Healthcheck}}' | python3 -m json.tool
+{
+    "Test": [
+        "CMD",
+        "python",
+        "-c",
+        "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=2).status == 200 else 1)"
+    ],
+    "Interval": 15000000000,
+    "Timeout": 3000000000,
+    "StartPeriod": 10000000000,
+    "Retries": 3
+}
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ docker image inspect sharaz123/breast-cancer-triage-api:1.0.0 --format '{{json .Config.Labels}}' | python3 -m json.tool
+{
+    "org.opencontainers.image.revision": "b7c0e9d",
+    "org.opencontainers.image.source": "https://github.com/Sharazsony/breast-cancer-triage-service",
+    "org.opencontainers.image.title": "breast-cancer-triage-api",
+    "org.opencontainers.image.version": "1.0.0"
+}
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ docker exec triage id
+uid=10001(app) gid=10001(app) groups=10001(app)
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ docker history sharaz123/breast-cancer-triage-api:1.0.0 --format 'table {{.CreatedBy}}\t{{.Size}}' | cut -c1-110 | head -22
+CREATED BY                                      SIZE
+CMD ["app.main:app" "--host" "0.0.0.0" "--po…   0B
+ENTRYPOINT ["uvicorn"]                          0B
+HEALTHCHECK {Test:[CMD python -c import urll…   0B
+EXPOSE [8000/tcp]                               0B
+USER app                                        0B
+ENV MODEL_VERSION=1.0.0 GIT_SHA=b7c0e9d MODE…   0B
+LABEL org.opencontainers.image.title=breast-…   0B
+ARG GIT_SHA=b7c0e9d                             0B
+ARG MODEL_VERSION=1.0.0                         0B
+COPY app/ app/ # buildkit                       28.7kB
+COPY /build/artifacts/model.joblib /build/ar…   20.5kB
+RUN /bin/sh -c pip install -r requirements-s…   293MB
+COPY requirements-serve.txt . # buildkit        12.3kB
+WORKDIR /app                                    8.19kB
+RUN /bin/sh -c groupadd --system --gid 10001…   41kB
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFER…   0B
+CMD ["python3"]                                 0B
+RUN /bin/sh -c set -eux;  for src in idle3 p…   16.4kB
+RUN /bin/sh -c set -eux;   savedAptMark="$(a…   44.9MB
+ENV PYTHON_SHA256=fb85a13414b028c49ba18bbd52…   0B
+ENV PYTHON_VERSION=3.12.12                      0B
+

@@ -1,0 +1,31 @@
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ docker pull sharaz123/breast-cancer-triage-api:1.0.0
+1.0.0: Pulling from sharaz123/breast-cancer-triage-api
+Digest: sha256:a840fb245daad9f6197dbe0079ab67991ea2e167146fa1e8cd7291f7b3c22a92
+Status: Image is up to date for sharaz123/breast-cancer-triage-api:1.0.0
+docker.io/sharaz123/breast-cancer-triage-api:1.0.0
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ docker run -d --name triage -p 8000:8000 sharaz123/breast-cancer-triage-api:1.0.0
+bcf702bcd14f5ef6f4c72620c1d46f69f6c6f1a70b1ef5fa187782fe6d6cb4d0
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ until curl -sf localhost:8000/health; do sleep 1; done; echo
+{"status":"ok"}
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ curl -s -X POST localhost:8000/predict -H 'Content-Type: application/json' -d @sample.json; echo
+{"label":"malignant","malignant_probability":1.0,"threshold":0.5,"model_version":"1.0.0"}
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ curl -s localhost:8000/model/info | python3 -m json.tool
+{
+    "model_version": "1.0.0",
+    "model_family": "logistic_regression",
+    "sklearn_version": "1.7.2",
+    "trained_with_sklearn_version": "1.7.2",
+    "git_commit": "b7c0e9d",
+    "decision_threshold": 0.5,
+    "feature_count": 30,
+    "test_metrics": {
+        "recall_malignant": 0.9512,
+        "accuracy": 0.9722,
+        "roc_auc": 0.9985
+    }
+}
+

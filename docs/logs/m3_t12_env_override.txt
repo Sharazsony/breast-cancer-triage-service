@@ -1,0 +1,15 @@
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ curl -s -X POST localhost:8000/predict -H 'Content-Type: application/json' -d @sample_borderline.json; echo '   <- default container (threshold 0.5)'
+{"label":"malignant","malignant_probability":0.7695,"threshold":0.5,"model_version":"1.0.0"}   <- default container (threshold 0.5)
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ docker run -d --name triage2 -p 8001:8000 -e DECISION_THRESHOLD=0.9 -e LOG_LEVEL=DEBUG sharaz123/breast-cancer-triage-api:1.0.0
+85a65ff80db9bfcaedee9201032385bb7cae0153ff02e93f692e07fa48413ab2
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ until curl -sf localhost:8001/health >/dev/null; do sleep 1; done; curl -s -X POST localhost:8001/predict -H 'Content-Type: application/json' -d @sample_borderline.json; echo '   <- same image, DECISION_THRESHOLD=0.9'
+{"label":"benign","malignant_probability":0.7695,"threshold":0.9,"model_version":"1.0.0"}   <- same image, DECISION_THRESHOLD=0.9
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ curl -s localhost:8001/model/info | python3 -c 'import json,sys; print("decision_threshold:", json.load(sys.stdin)["decision_threshold"])'
+decision_threshold: 0.9
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ docker logs triage2 2>&1 | grep -E 'DEBUG|threshold' | head -6
+2026-10-20 07:52:07,892 INFO triage: Model ready: logistic_regression loaded from /app/artifacts/model.joblib (threshold=0.9)
+

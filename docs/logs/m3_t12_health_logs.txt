@@ -1,0 +1,21 @@
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ sleep 16; docker ps --filter name=triage --format 'table {{.Names}}\t{{.Status}}\t{{.Ports}}'
+NAMES     STATUS                    PORTS
+triage    Up 34 seconds (healthy)   0.0.0.0:8000->8000/tcp, [::]:8000->8000/tcp
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ docker inspect --format '{{.State.Health.Status}} (last check exit={{(index .State.Health.Log 0).ExitCode}})' triage
+healthy (last check exit=0)
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ docker logs triage
+2026-10-20 07:51:15,118 INFO uvicorn.error: Started server process [1]
+2026-10-20 07:51:15,118 INFO uvicorn.error: Waiting for application startup.
+2026-10-20 07:51:15,207 INFO triage.counter: REDIS_HOST not set - request counting disabled
+2026-10-20 07:51:15,208 INFO triage: Model ready: logistic_regression loaded from /app/artifacts/model.joblib (threshold=0.5)
+2026-10-20 07:51:15,208 INFO uvicorn.error: Application startup complete.
+2026-10-20 07:51:15,208 INFO uvicorn.error: Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+2026-10-20 07:51:15,736 INFO uvicorn.access: 172.17.0.1:55342 - "GET /health HTTP/1.1" 200
+2026-10-20 07:51:15,750 INFO triage: prediction label=malignant malignant_probability=1.0000
+2026-10-20 07:51:15,750 INFO uvicorn.access: 172.17.0.1:55358 - "POST /predict HTTP/1.1" 200
+2026-10-20 07:51:15,763 INFO uvicorn.access: 172.17.0.1:55366 - "GET /model/info HTTP/1.1" 200
+2026-10-20 07:51:17,327 INFO uvicorn.access: 127.0.0.1:40430 - "GET /health HTTP/1.1" 200
+2026-10-20 07:51:32,675 INFO uvicorn.access: 127.0.0.1:50570 - "GET /health HTTP/1.1" 200
+
