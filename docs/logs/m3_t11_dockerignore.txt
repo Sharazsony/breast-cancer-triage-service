@@ -1,0 +1,14 @@
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ cat .dockerignore
+# Allow-list: ignore everything, then re-include only what the build needs.
+*
+!app/
+!training/
+!params.yaml
+!requirements-train.txt
+!requirements-serve.txt
+# The training stage reads the DVC-restored dataset (run `dvc pull` before building).
+!data/raw/breast_cancer.csv
+
+**/__pycache__
+**/*.pyc
+
