@@ -1,0 +1,39 @@
+# Local stack: builds the api image from the Dockerfile and runs it next to Redis.
+# Usage: cp .env.example .env && GIT_SHA=$(git rev-parse --short HEAD) docker compose up -d --build
+name: breast-cancer-triage
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        MODEL_VERSION: ${MODEL_VERSION:-1.0.0}
+        GIT_SHA: ${GIT_SHA:-unknown}
+    image: ${DOCKERHUB_USERNAME:?set DOCKERHUB_USERNAME in .env}/breast-cancer-triage-api:${IMAGE_TAG:-1.0.0}
+    ports:
+      - "${API_PORT:-8000}:8000"
+    environment:
+      REDIS_HOST: redis          # service name on the Compose network
+      REDIS_PORT: "6379"
+      DECISION_THRESHOLD: ${DECISION_THRESHOLD:-0.5}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  redis:
+    image: redis:7.4.6-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+
+volumes:
+  redis-data:

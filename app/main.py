@@ -15,6 +15,7 @@ import sklearn
 from fastapi import FastAPI, Request
 
 from app.config import get_settings
+from app.counter import PredictionCounter
 from app.schemas import FEATURE_NAMES, PredictRequest, PredictResponse
 
 settings = get_settings()
@@ -48,7 +49,7 @@ async def lifespan(app: FastAPI):
     app.state.card = json.loads(card_path.read_text()) if card_path.is_file() else {}
     if app.state.card.get("feature_names", FEATURE_NAMES) != FEATURE_NAMES:
         raise RuntimeError("Model feature order does not match the API schema")
-    app.state.predictions_served = 0
+    app.state.counter = PredictionCounter(settings.redis_host, settings.redis_port)
     logger.info("Model ready: %s loaded from %s (threshold=%s)",
                 app.state.card.get("model_family"), model_path, settings.decision_threshold)
     yield
@@ -67,7 +68,7 @@ def predict(payload: PredictRequest, request: Request):
     row = np.array([[getattr(payload, f) for f in FEATURE_NAMES]], dtype=float)
     proba = float(request.app.state.model.predict_proba(row)[0, 1])
     label = "malignant" if proba >= settings.decision_threshold else "benign"
-    request.app.state.predictions_served += 1
+    request.app.state.counter.increment()
     logger.info("prediction label=%s malignant_probability=%.4f", label, proba)
     return PredictResponse(label=label, malignant_probability=round(proba, 4),
                            threshold=settings.decision_threshold,
@@ -91,5 +92,5 @@ def model_info(request: Request):
 
 @app.get("/stats")
 def stats(request: Request):
-    # Placeholder until Milestone 4: in-process counter, resets on restart.
-    return {"predictions_served": request.app.state.predictions_served, "backend": "memory"}
+    counter = request.app.state.counter
+    return {"predictions_served": counter.value(), "redis_enabled": counter.enabled}

@@ -1,0 +1,34 @@
+# Registry-only stack: uses the published image, no build section.
+# Usage (in an empty directory containing only this file and .env):
+#   docker compose -f docker-compose.hub.yml up -d
+name: breast-cancer-triage-hub
+
+services:
+  api:
+    image: ${DOCKERHUB_USERNAME:?set DOCKERHUB_USERNAME in .env}/breast-cancer-triage-api:${IMAGE_TAG:-1.0.0}
+    ports:
+      - "${API_PORT:-8000}:8000"
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      DECISION_THRESHOLD: ${DECISION_THRESHOLD:-0.5}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  redis:
+    image: redis:7.4.6-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+
+volumes:
+  redis-data:
