@@ -1,0 +1,23 @@
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ docker stop web1
+web1
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ docker ps --filter name=web --format 'table {{.Names}}\t{{.Status}}'
+NAMES     STATUS
+web2      Up 8 seconds
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ docker ps -a --filter name=web --format 'table {{.Names}}\t{{.Status}}'
+NAMES     STATUS
+web2      Up 9 seconds
+web1      Exited (0) Less than a second ago
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ docker start web1 && docker ps --filter name=web1 --format '{{.Names}} {{.Status}}'
+web1
+web1 Up Less than a second
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ docker rm -f web1 web2
+web1
+web2
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ docker ps -a --filter name=web --format '{{.Names}}' | wc -l
+0
+

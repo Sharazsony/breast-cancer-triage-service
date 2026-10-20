@@ -1,0 +1,8 @@
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ echo '<h1>Meridian Diagnostics - version 2 (edited on host)</h1>' > ~/MLOps_Assignment2/m0-web/index.html
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ curl -s localhost:8083
+<h1>Meridian Diagnostics - version 2 (edited on host)</h1>
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ docker ps --filter name=webmount --format '{{.Names}} {{.Status}}  (same container, not restarted)'
+webmount Up 2 seconds  (same container, not restarted)
+

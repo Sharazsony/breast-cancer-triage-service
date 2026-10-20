@@ -1,0 +1,14 @@
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ for i in 1 2 3; do curl -s -o /dev/null -w 'request $i -> %{http_code}\n' localhost:8081/; done; curl -s -o /dev/null -w 'missing page -> %{http_code}\n' localhost:8081/nope
+request $i -> 200
+request $i -> 200
+request $i -> 200
+missing page -> 404
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ docker logs --tail 6 web1
+2026/10/20 07:16:50 [notice] 1#1: start worker process 36
+172.17.0.1 - - [20/Oct/2026:07:16:59 +0000] "GET / HTTP/1.1" 200 615 "-" "curl/8.18.0" "-"
+172.17.0.1 - - [20/Oct/2026:07:16:59 +0000] "GET / HTTP/1.1" 200 615 "-" "curl/8.18.0" "-"
+172.17.0.1 - - [20/Oct/2026:07:16:59 +0000] "GET / HTTP/1.1" 200 615 "-" "curl/8.18.0" "-"
+2026/10/20 07:16:59 [error] 32#32: *4 open() "/usr/share/nginx/html/nope" failed (2: No such file or directory), client: 172.17.0.1, server: localhost, request: "GET /nope HTTP/1.1", host: "localhost:8081"
+172.17.0.1 - - [20/Oct/2026:07:16:59 +0000] "GET /nope HTTP/1.1" 404 153 "-" "curl/8.18.0" "-"
+

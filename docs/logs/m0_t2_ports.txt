@@ -1,0 +1,24 @@
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ docker run -d --name web1 -p 8081:80 nginx:1.29.3
+3a3330f5a9d42a1e918de29c66b33c5ce0965063421a5c7bf4c24770994b5731
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ curl -s localhost:8081 | grep -i '<title>'
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ docker run -d --name web2 -p 8081:80 nginx:1.29.3
+583296a1f67cbe956268ea28d45953fd24633d9886b6b791da335ad9d73c5dc8
+docker: Error response from daemon: failed to set up container networking: driver failed programming external connectivity on endpoint web2 (5ff03b0bd9e57900bdb371e15fc9aa1074067d0d73acc2a126721b27acbd715b): Bind for 0.0.0.0:8081 failed: port is already allocated
+
+Run 'docker run --help' for more information
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ docker rm web2
+web2
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ docker run -d --name web2 -p 8082:80 nginx:1.29.3
+88ae8d4ab1eddceb9125d1cad90bd1d9d64db86403870792bb6a179767cd01a3
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ docker ps --format 'table {{.Names}}\t{{.Image}}\t{{.Ports}}\t{{.Status}}'
+NAMES                      IMAGE                  PORTS                                                                 STATUS
+web2                       nginx:1.29.3           0.0.0.0:8082->80/tcp, [::]:8082->80/tcp                               Up Less than a second
+web1                       nginx:1.29.3           0.0.0.0:8081->80/tcp, [::]:8081->80/tcp                               Up 1 second
+my-cluster-control-plane   kindest/node:v1.33.1   0.0.0.0:80->80/tcp, 0.0.0.0:443->443/tcp, 127.0.0.1:45323->6443/tcp   Up 3 hours
+kind-registry              registry:2             0.0.0.0:5000->5000/tcp, [::]:5000->5000/tcp                           Up 3 hours
+

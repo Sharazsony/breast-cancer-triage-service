@@ -1,0 +1,11 @@
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ docker pull -q redis:7.4.6-alpine
+docker.io/library/redis:7.4.6-alpine
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ docker pull -q redis:7.4.6
+docker.io/library/redis:7.4.6
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ docker images redis --format 'table {{.Repository}}\t{{.Tag}}\t{{.ID}}\t{{.Size}}'
+REPOSITORY   TAG            IMAGE ID       SIZE
+redis        7.4.6          a9cc41d6d01d   175MB
+redis        7.4.6-alpine   3b73847e7287   61.2MB
+

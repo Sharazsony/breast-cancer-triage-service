@@ -1,0 +1,9 @@
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ cat ~/MLOps_Assignment2/m0-web/index.html
+<h1>Meridian Diagnostics - version 1</h1>
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ docker run -d --name webmount -p 8083:80 -v ~/MLOps_Assignment2/m0-web:/usr/share/nginx/html:ro nginx:1.29.3
+c80b03b6352430fcfd9547492becd08141a66867d419fe9391804bb63bd4c1b1
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ sleep 1; curl -s localhost:8083
+<h1>Meridian Diagnostics - version 1</h1>
+

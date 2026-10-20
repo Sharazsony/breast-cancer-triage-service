@@ -1,0 +1,17 @@
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ docker ps -a --filter ancestor=ubuntu:24.04 --format '{{.Names}} {{.Status}}'
+u1 Exited (0) Less than a second ago
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ docker rmi ubuntu:24.04
+Error response from daemon: conflict: unable to delete ubuntu:24.04 (must be forced) - container f6a792018857 is using its referenced image 68ee22004a91
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ docker rm u1
+u1
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ docker rmi ubuntu:24.04
+Untagged: ubuntu:24.04
+Deleted: sha256:68ee22004a9109b44973313b02ff7b1de250f1de0f5ecb628d73f579aaff33ac
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ docker images ubuntu
+WARNING: This output is designed for human readability. For machine-readable output, please use --format.
+IMAGE   ID             DISK USAGE   CONTENT SIZE   EXTRA
+

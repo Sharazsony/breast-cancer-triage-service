@@ -1,0 +1,38 @@
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ docker run -d --name pg0 postgres:17.6; sleep 3
+1bcaa5637bb7aa512585b72ef1062a8b97dc7fa30e9db828bd212738db0e9810
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ docker ps -a --filter name=pg0 --format '{{.Names}} {{.Status}}'
+pg0 Exited (1) 3 seconds ago
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ docker logs pg0
+Error: Database is uninitialized and superuser password is not specified.
+       You must specify POSTGRES_PASSWORD to a non-empty value for the
+       superuser. For example, "-e POSTGRES_PASSWORD=password" on "docker run".
+
+       You may also use "POSTGRES_HOST_AUTH_METHOD=trust" to allow all
+       connections without a password. This is *not* recommended.
+
+       See PostgreSQL documentation about "trust":
+       https://www.postgresql.org/docs/current/auth-trust.html
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ docker run -d --name pg1 -e POSTGRES_USER=meridian -e POSTGRES_PASSWORD=labdemo -e POSTGRES_DB=triage postgres:17.6; sleep 6
+5f830808ffcd7f6f5a0eb79b78f033f6c78ce5627332abd6bc60af1dcf13e464
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ docker ps --filter name=pg1 --format '{{.Names}} {{.Status}}'
+pg1 Up 6 seconds
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ docker exec pg1 psql -U meridian -d triage -c 'SELECT current_user, current_database(), version();'
+ current_user | current_database |                                                      version                                                       
+--------------+------------------+--------------------------------------------------------------------------------------------------------------------
+ meridian     | triage           | PostgreSQL 17.6 (Debian 17.6-2.pgdg13+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
+(1 row)
+
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ docker exec pg1 psql -U meridian -d triage -c '\l triage'
+                                                 List of databases
+  Name  |  Owner   | Encoding | Locale Provider |  Collate   |   Ctype    | Locale | ICU Rules | Access privileges 
+--------+----------+----------+-----------------+------------+------------+--------+-----------+-------------------
+ triage | meridian | UTF8     | libc            | en_US.utf8 | en_US.utf8 |        |           | 
+(1 row)
+
+
