@@ -1,0 +1,36 @@
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ python -m training.train --data-path data/raw/breast_cancer.csv --output-dir artifacts --model-version 1.0.0; echo exit code: $?
+Loaded 539 rows, 30 features, 206 malignant
+
+model                  cv_recall   cv_acc   cv_auc  test_recall  test_acc  test_auc
+logistic_regression       0.9697   0.9791   0.9934       0.9512    0.9722    0.9985  <== selected
+random_forest             0.9273   0.9536   0.9858       0.8780    0.9537    0.9975
+
+Saved artifacts/model.joblib, model_card.json and metrics.json (version 1.0.0, sklearn 1.7.2)
+PASS: test malignant recall 0.9512 >= 0.95
+exit code: 0
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ cat artifacts/model_card.json | head -20
+{
+  "model_version": "1.0.0",
+  "model_family": "logistic_regression",
+  "positive_class": "malignant",
+  "feature_names": [
+    "mean_radius",
+    "mean_texture",
+    "mean_perimeter",
+    "mean_area",
+    "mean_smoothness",
+    "mean_compactness",
+    "mean_concavity",
+    "mean_concave_points",
+    "mean_symmetry",
+    "mean_fractal_dimension",
+    "radius_error",
+    "texture_error",
+    "perimeter_error",
+    "area_error",
+    "smoothness_error",
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ dvc status
+Data and pipelines are up to date.
+

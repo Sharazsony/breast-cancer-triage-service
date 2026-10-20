@@ -1,0 +1,31 @@
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ curl -s localhost:8090/health
+{"status":"ok"}
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ curl -s -X POST localhost:8090/predict -H 'Content-Type: application/json' -d @sample.json
+{"label":"malignant","malignant_probability":1.0,"threshold":0.5,"model_version":"1.0.0"}
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ curl -s localhost:8090/model/info | python -m json.tool
+{
+    "model_version": "1.0.0",
+    "model_family": "logistic_regression",
+    "sklearn_version": "1.7.2",
+    "trained_with_sklearn_version": "1.7.2",
+    "git_commit": "84827f7",
+    "decision_threshold": 0.5,
+    "feature_count": 30,
+    "test_metrics": {
+        "recall_malignant": 0.9512,
+        "accuracy": 0.9722,
+        "roc_auc": 0.9985
+    }
+}
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ curl -s -w '  HTTP %{http_code}\n' -X POST localhost:8090/predict -H 'Content-Type: application/json' -d '{"mean_radius": -1}' | cut -c1-200
+{"detail":[{"type":"greater_than_equal","loc":["body","mean_radius"],"msg":"Input should be greater than or equal to 0","input":-1,"ctx":{"ge":0.0}},{"type":"missing","loc":["body","mean_texture"],"ms
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ curl -s -o /dev/null -w 'negative value -> HTTP %{http_code}\n' -X POST localhost:8090/predict -H 'Content-Type: application/json' -d "$(sed 's/17.99/-5/' sample.json)"
+negative value -> HTTP 422
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ curl -s -o /dev/null -w 'string value -> HTTP %{http_code}\n' -X POST localhost:8090/predict -H 'Content-Type: application/json' -d "$(sed 's/17.99/\"big\"/' sample.json)"
+string value -> HTTP 422
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ curl -s localhost:8090/stats
+{"predictions_served":1,"backend":"memory"}

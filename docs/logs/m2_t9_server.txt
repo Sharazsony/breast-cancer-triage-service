@@ -1,0 +1,17 @@
+2026-10-20 12:01:49,464 INFO uvicorn.error: Started server process [168846]
+2026-10-20 12:01:49,464 INFO uvicorn.error: Waiting for application startup.
+2026-10-20 12:01:49,514 INFO triage: Loaded model logistic_regression from artifacts/model.joblib (threshold=0.5)
+2026-10-20 12:01:49,514 INFO uvicorn.error: Application startup complete.
+2026-10-20 12:01:49,515 INFO uvicorn.error: Uvicorn running on http://127.0.0.1:8090 (Press CTRL+C to quit)
+2026-10-20 12:01:50,923 INFO uvicorn.access: 127.0.0.1:53610 - "GET /health HTTP/1.1" 200
+2026-10-20 12:01:50,935 INFO triage: prediction label=malignant malignant_probability=1.0000
+2026-10-20 12:01:50,935 INFO uvicorn.access: 127.0.0.1:53624 - "POST /predict HTTP/1.1" 200
+2026-10-20 12:01:50,962 INFO uvicorn.access: 127.0.0.1:53640 - "GET /model/info HTTP/1.1" 200
+2026-10-20 12:01:51,014 INFO uvicorn.access: 127.0.0.1:53644 - "POST /predict HTTP/1.1" 422
+2026-10-20 12:01:51,030 INFO uvicorn.access: 127.0.0.1:53654 - "POST /predict HTTP/1.1" 422
+2026-10-20 12:01:51,041 INFO uvicorn.access: 127.0.0.1:53664 - "POST /predict HTTP/1.1" 422
+2026-10-20 12:01:51,050 INFO uvicorn.access: 127.0.0.1:53676 - "GET /stats HTTP/1.1" 200
+2026-10-20 12:01:52,415 INFO uvicorn.access: 127.0.0.1:53686 - "GET /docs HTTP/1.1" 200
+2026-10-20 12:01:53,894 INFO uvicorn.access: 127.0.0.1:53686 - "GET /openapi.json HTTP/1.1" 200
+2026-10-20 12:01:54,648 INFO triage: prediction label=malignant malignant_probability=1.0000
+2026-10-20 12:01:54,648 INFO uvicorn.access: 127.0.0.1:53686 - "POST /predict HTTP/1.1" 200
