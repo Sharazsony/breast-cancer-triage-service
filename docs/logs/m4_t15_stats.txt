@@ -1,0 +1,15 @@
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ curl -s localhost:8000/stats; echo
+{"predictions_served":0,"redis_enabled":true}
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ for i in 1 2 3; do curl -s -X POST localhost:8000/predict -H 'Content-Type: application/json' -d @sample.json; echo; done; curl -s -X POST localhost:8000/predict -H 'Content-Type: application/json' -d @sample_borderline.json; echo
+{"label":"malignant","malignant_probability":1.0,"threshold":0.5,"model_version":"1.0.0"}
+{"label":"malignant","malignant_probability":1.0,"threshold":0.5,"model_version":"1.0.0"}
+{"label":"malignant","malignant_probability":1.0,"threshold":0.5,"model_version":"1.0.0"}
+{"label":"malignant","malignant_probability":0.7695,"threshold":0.5,"model_version":"1.0.0"}
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ curl -s localhost:8000/stats; echo
+{"predictions_served":4,"redis_enabled":true}
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ docker compose exec redis redis-cli GET predictions_served
+4
+

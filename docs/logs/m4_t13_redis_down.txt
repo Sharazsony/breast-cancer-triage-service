@@ -1,0 +1,17 @@
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ docker compose stop redis
+ Container breast-cancer-triage-redis-1  Stopping
+ Container breast-cancer-triage-redis-1  Stopped
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ curl -s -w '   HTTP %{http_code}\n' -X POST localhost:8000/predict -H 'Content-Type: application/json' -d @sample.json
+{"label":"malignant","malignant_probability":1.0,"threshold":0.5,"model_version":"1.0.0"}   HTTP 200
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ curl -s localhost:8000/stats; echo
+{"predictions_served":null,"redis_enabled":true}
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ docker compose logs api 2>&1 | grep -i 'redis unavailable' | tail -2 | cut -c1-160
+api-1  | 2026-10-20 08:07:01,691 WARNING triage.counter: Redis unavailable, prediction not counted: Error -3 connecting to redis:6379. Temporary failure in name
+api-1  | 2026-10-20 08:07:01,722 WARNING triage.counter: Redis unavailable, cannot read counter: Error -3 connecting to redis:6379. Temporary failure in name re
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ docker compose start redis >/dev/null 2>&1; sleep 3; curl -s -X POST localhost:8000/predict -H 'Content-Type: application/json' -d @sample.json >/dev/null; curl -s localhost:8000/stats; echo '   <- counting resumes'
+{"predictions_served":1,"redis_enabled":true}   <- counting resumes
+

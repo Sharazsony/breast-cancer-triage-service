@@ -1,0 +1,25 @@
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ GIT_SHA=$(git rev-parse --short HEAD) docker compose up -d --build 2>&1 | grep -E 'naming to|PASS|Container|Network|Volume|Built|ERROR'
+#20 11.53 PASS: test malignant recall 0.9512 >= 0.95
+#24 naming to docker.io/sharaz123/breast-cancer-triage-api:1.0.0
+#24 naming to docker.io/sharaz123/breast-cancer-triage-api:1.0.0 done
+ sharaz123/breast-cancer-triage-api:1.0.0  Built
+ Network breast-cancer-triage_default  Creating
+ Network breast-cancer-triage_default  Created
+ Volume breast-cancer-triage_redis-data  Creating
+ Volume breast-cancer-triage_redis-data  Created
+ Container breast-cancer-triage-redis-1  Creating
+ Container breast-cancer-triage-redis-1  Created
+ Container breast-cancer-triage-api-1  Creating
+ Container breast-cancer-triage-api-1  Created
+ Container breast-cancer-triage-redis-1  Starting
+ Container breast-cancer-triage-redis-1  Started
+ Container breast-cancer-triage-redis-1  Waiting
+ Container breast-cancer-triage-redis-1  Healthy
+ Container breast-cancer-triage-api-1  Starting
+ Container breast-cancer-triage-api-1  Started
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ sleep 12; docker compose ps --format 'table {{.Service}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}'
+SERVICE   IMAGE                                      STATUS                    PORTS
+api       sharaz123/breast-cancer-triage-api:1.0.0   Up 12 seconds (healthy)   0.0.0.0:8000->8000/tcp, [::]:8000->8000/tcp
+redis     redis:7.4.6-alpine                         Up 18 seconds (healthy)   6379/tcp
+

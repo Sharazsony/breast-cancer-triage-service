@@ -1,0 +1,27 @@
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ docker compose down -v
+ Container breast-cancer-triage-api-1  Stopping
+ Container breast-cancer-triage-api-1  Stopped
+ Container breast-cancer-triage-api-1  Removing
+ Container breast-cancer-triage-api-1  Removed
+ Container breast-cancer-triage-redis-1  Stopping
+ Container breast-cancer-triage-redis-1  Stopped
+ Container breast-cancer-triage-redis-1  Removing
+ Container breast-cancer-triage-redis-1  Removed
+ Volume breast-cancer-triage_redis-data  Removing
+ Network breast-cancer-triage_default  Removing
+ Volume breast-cancer-triage_redis-data  Removed
+ Network breast-cancer-triage_default  Removed
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ docker volume ls --filter name=breast-cancer-triage
+DRIVER    VOLUME NAME
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ docker compose up -d 2>&1 | grep -E 'Volume|Healthy|Started'
+ Volume breast-cancer-triage_redis-data  Creating
+ Volume breast-cancer-triage_redis-data  Created
+ Container breast-cancer-triage-redis-1  Started
+ Container breast-cancer-triage-redis-1  Healthy
+ Container breast-cancer-triage-api-1  Started
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ until curl -sf localhost:8000/health >/dev/null; do sleep 1; done; curl -s localhost:8000/stats; echo '   <- counter reset (volume removed)'
+{"predictions_served":0,"redis_enabled":true}   <- counter reset (volume removed)
+
