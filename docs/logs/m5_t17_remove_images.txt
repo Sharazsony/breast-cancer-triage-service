@@ -1,0 +1,14 @@
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ docker images --format '{{.Repository}}:{{.Tag}}' | grep triage-api
+sharaz123/breast-cancer-triage-api:1.0.0
+breast-cancer-triage-api:naive
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ docker rmi $(docker images --format '{{.Repository}}:{{.Tag}}' | grep triage-api)
+Untagged: sharaz123/breast-cancer-triage-api:1.0.0
+Deleted: sha256:fce9092d5220f4bd5c0e7771e245c461e89870093aa28728024d47e0254136c5
+Untagged: breast-cancer-triage-api:naive
+Deleted: sha256:330b8fd2baade86c7dc184a2b70ff29b6dd2eece579a07965171c080234d8508
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ docker image prune -f >/dev/null; docker images | grep -c triage-api || true
+WARNING: This output is designed for human readability. For machine-readable output, please use --format.
+0
+

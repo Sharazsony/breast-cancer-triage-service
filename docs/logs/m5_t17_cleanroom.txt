@@ -1,0 +1,42 @@
+sharaz-sony@sharazlab:~/MLOps_Assignment2/cleanroom$ ls -A
+.env
+docker-compose.hub.yml
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/cleanroom$ docker images | grep -c triage-api || true
+WARNING: This output is designed for human readability. For machine-readable output, please use --format.
+0
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/cleanroom$ docker compose -f docker-compose.hub.yml up -d 2>&1 | grep -vE 'Download|Extracting|Waiting|Verifying|Downloading|Pulling fs'
+ api Pulling 
+ 4aa4ceb33d16 Pull complete 
+ e84bd01c38ea Pull complete 
+ f68b63b4cb6a Pull complete 
+ e92de609d822 Pull complete 
+ 9da7591cc72f Pull complete 
+ 00f9127f4a88 Pull complete 
+ api Pulled 
+ Network breast-cancer-triage-hub_default  Creating
+ Network breast-cancer-triage-hub_default  Created
+ Volume breast-cancer-triage-hub_redis-data  Creating
+ Volume breast-cancer-triage-hub_redis-data  Created
+ Container breast-cancer-triage-hub-redis-1  Creating
+ Container breast-cancer-triage-hub-redis-1  Created
+ Container breast-cancer-triage-hub-api-1  Creating
+ Container breast-cancer-triage-hub-api-1  Created
+ Container breast-cancer-triage-hub-redis-1  Starting
+ Container breast-cancer-triage-hub-redis-1  Started
+ Container breast-cancer-triage-hub-redis-1  Healthy
+ Container breast-cancer-triage-hub-api-1  Starting
+ Container breast-cancer-triage-hub-api-1  Started
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/cleanroom$ until curl -sf localhost:8000/health >/dev/null; do sleep 1; done; docker compose -f docker-compose.hub.yml ps --format 'table {{.Service}}\t{{.Image}}\t{{.Status}}'
+SERVICE   IMAGE                                      STATUS
+api       sharaz123/breast-cancer-triage-api:1.0.0   Up 3 seconds (health: starting)
+redis     redis:7.4.6-alpine                         Up 9 seconds (healthy)
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/cleanroom$ curl -s -X POST localhost:8000/predict -H 'Content-Type: application/json' -d @/home/sharaz-sony/MLOps_Assignment2/breast-cancer-triage-service/sample.json; echo
+{"label":"malignant","malignant_probability":1.0,"threshold":0.5,"model_version":"1.0.0"}
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/cleanroom$ curl -s localhost:8000/stats; echo
+{"predictions_served":1,"redis_enabled":true}
+

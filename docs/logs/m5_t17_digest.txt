@@ -1,0 +1,12 @@
+sharaz-sony@sharazlab:~/MLOps_Assignment2/cleanroom$ docker image inspect sharaz123/breast-cancer-triage-api:1.0.0 --format 'Local pulled RepoDigest: {{index .RepoDigests 0}}'
+Local pulled RepoDigest: sharaz123/breast-cancer-triage-api@sha256:32b15461e30c548c454f60f9e4c141fafa790ccb55f4a5c0957203745c77ab2b
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/cleanroom$ curl -s https://hub.docker.com/v2/repositories/sharaz123/breast-cancer-triage-api/tags/1.0.0 | python3 -c 'import json,sys; d=json.load(sys.stdin); print("Docker Hub tag 1.0.0 digest:", d["digest"])'
+Docker Hub tag 1.0.0 digest: sha256:32b15461e30c548c454f60f9e4c141fafa790ccb55f4a5c0957203745c77ab2b
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/cleanroom$ curl -s https://hub.docker.com/v2/repositories/sharaz123/breast-cancer-triage-api/tags/latest | python3 -c 'import json,sys; d=json.load(sys.stdin); print("Docker Hub tag latest digest:", d["digest"])'
+Docker Hub tag latest digest: sha256:32b15461e30c548c454f60f9e4c141fafa790ccb55f4a5c0957203745c77ab2b
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/cleanroom$ docker image inspect sharaz123/breast-cancer-triage-api:1.0.0 --format '{{index .Config.Labels "org.opencontainers.image.revision"}}'
+9e06fdc
+
