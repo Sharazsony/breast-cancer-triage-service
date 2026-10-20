@@ -60,6 +60,7 @@ app = FastAPI(title="Breast Cancer Triage API", version=settings.model_version, 
 
 @app.get("/health")
 def health():
+    """Liveness probe used by the Docker HEALTHCHECK; never touches Redis."""
     return {"status": "ok"}
 
 
