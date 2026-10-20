@@ -1,0 +1,111 @@
+# Build the production image on a GitHub-hosted runner, smoke-test it, then push
+# <user>/breast-cancer-triage-api:<version> and :latest to Docker Hub.
+#
+# Required repository settings:
+#   secret   DOCKERHUB_TOKEN     Docker Hub personal access token (Read & Write)
+#   variable DOCKERHUB_USERNAME  optional, defaults to sharaz123
+name: Build and push image
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Image / model version tag
+        default: "1.0.0"
+  push:
+    branches: [main]
+    paths:
+      - app/**
+      - training/**
+      - Dockerfile
+      - .dockerignore
+      - requirements-train.txt
+      - requirements-serve.txt
+      - params.yaml
+      - data/raw/*.dvc
+      - .github/workflows/docker-publish.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: docker-publish
+  cancel-in-progress: true
+
+env:
+  IMAGE: ${{ vars.DOCKERHUB_USERNAME || 'sharaz123' }}/breast-cancer-triage-api
+  MODEL_VERSION: ${{ inputs.version || '1.0.0' }}
+
+jobs:
+  build-test-push:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Restore the DVC-tracked dataset from dvc-remote/
+        run: |
+          pip install dvc==3.63.0 pathspec==0.12.1
+          dvc pull data/raw/breast_cancer.csv.dvc
+          wc -l data/raw/breast_cancer.csv
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Short git SHA
+        id: meta
+        run: echo "sha=${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+
+      - name: Build image (loaded locally for the smoke test)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          load: true
+          tags: ${{ env.IMAGE }}:${{ env.MODEL_VERSION }}
+          build-args: |
+            MODEL_VERSION=${{ env.MODEL_VERSION }}
+            GIT_SHA=${{ steps.meta.outputs.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Smoke test (/health, /predict, /model/info)
+        run: |
+          docker run -d --name smoke -p 8000:8000 "$IMAGE:$MODEL_VERSION"
+          for i in $(seq 1 30); do curl -sf localhost:8000/health && break; sleep 1; done
+          curl -sf -X POST localhost:8000/predict -H 'Content-Type: application/json' -d @sample.json
+          curl -sf localhost:8000/model/info | tee info.json
+          grep -q "\"model_version\":\"$MODEL_VERSION\"" info.json
+          docker inspect --format '{{.Config.User}} {{json .Config.ExposedPorts}}' "$IMAGE:$MODEL_VERSION"
+          docker rm -f smoke
+
+      - uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME || 'sharaz123' }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Push :version and :latest (same image, served from the build cache)
+        id: push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          # Single-platform manifest without attestations, so the digest shown on
+          # Docker Hub is the same digest `docker pull` reports.
+          provenance: false
+          sbom: false
+          tags: |
+            ${{ env.IMAGE }}:${{ env.MODEL_VERSION }}
+            ${{ env.IMAGE }}:latest
+          build-args: |
+            MODEL_VERSION=${{ env.MODEL_VERSION }}
+            GIT_SHA=${{ steps.meta.outputs.sha }}
+          cache-from: type=gha
+
+      - name: Summary
+        run: |
+          echo "### Pushed \`$IMAGE\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "- tags: \`$MODEL_VERSION\`, \`latest\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "- digest: \`${{ steps.push.outputs.digest }}\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "- git sha: \`${{ steps.meta.outputs.sha }}\`" >> "$GITHUB_STEP_SUMMARY"
