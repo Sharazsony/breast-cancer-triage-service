@@ -1,0 +1,38 @@
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ grep -n 'Liveness probe' app/main.py   # the one-line code edit (commit $(git log -1 --format=%h -- app/main.py))
+63:    """Liveness probe used by the Docker HEALTHCHECK; never touches Redis."""
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ gh run view 39389511493 -R Sharazsony/breast-cancer-triage-service --json jobs --jq '.jobs[0].steps[] | select(.name|test("^Build image")) | "REBUILD after code edit: \(((.completedAt|fromdate)-(.startedAt|fromdate)))s"'
+REBUILD after code edit: 26s
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ gh run view 39389511493 -R Sharazsony/breast-cancer-triage-service --log | grep 'Build image (loaded' | sed -E 's/^.*Z //' | grep -E '^#[0-9]+ (\[(trainer|runtime) [0-9]/|CACHED|DONE [0-9.]+s)' | awk '!seen[$0]++' | grep -B1 -E 'CACHED|DONE [1-9][0-9]*\.[0-9]s' | grep -v '^--'
+#11 [trainer 7/8] COPY data/raw/breast_cancer.csv data/raw/breast_cancer.csv
+#11 CACHED
+#12 [trainer 8/8] RUN python -m training.train --data-path data/raw/breast_cancer.csv         --output-dir artifacts --model-version "1.0.0"
+#12 CACHED
+#13 [runtime 5/7] RUN pip install -r requirements-serve.txt  && rm -f /usr/local/lib/python3.12/site-packages/sklearn/datasets/data/breast_cancer.csv
+#13 CACHED
+#14 [trainer 3/8] COPY requirements-train.txt .
+#14 CACHED
+#15 [trainer 5/8] COPY params.yaml .
+#15 CACHED
+#16 [runtime 4/7] COPY requirements-serve.txt .
+#16 CACHED
+#17 [runtime 2/7] RUN groupadd --system --gid 10001 app  && useradd --system --uid 10001 --gid app --no-create-home --shell /usr/sbin/nologin app
+#17 CACHED
+#18 [runtime 3/7] WORKDIR /app
+#18 CACHED
+#19 [trainer 2/8] WORKDIR /build
+#19 CACHED
+#20 [trainer 4/8] RUN pip install -r requirements-train.txt
+#20 CACHED
+#21 [trainer 6/8] COPY training/ training/
+#21 CACHED
+#22 [runtime 6/7] COPY --from=trainer /build/artifacts/model.joblib /build/artifacts/model_card.json artifacts/
+#22 CACHED
+#22 DONE 10.4s
+#22 DONE 12.4s
+#23 DONE 0.8s
+#24 DONE 6.2s
+#25 DONE 5.4s
+#26 DONE 3.0s
+

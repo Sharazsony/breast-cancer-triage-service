@@ -1,0 +1,21 @@
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ gh run list -R Sharazsony/breast-cancer-triage-service --limit 2 --json databaseId,displayTitle,conclusion,createdAt --jq '.[] | "\(.databaseId)  \(.conclusion)  \(.displayTitle[:60])"'
+39389511493  success  Milestone 3: one-line code edit to demonstrate dependency la
+39387988907  success  CI: build, smoke-test and push the image to Docker Hub from 
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ gh run view 39387988907 -R Sharazsony/breast-cancer-triage-service --json jobs --jq '.jobs[0].steps[] | select(.name|test("^Build image")) | "COLD build step (empty cache): \(((.completedAt|fromdate)-(.startedAt|fromdate)))s"'
+COLD build step (empty cache): 87s
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ gh run view 39387988907 -R Sharazsony/breast-cancer-triage-service --log | grep 'Build image (loaded' | sed -E 's/^.*Z //' | grep -E '^#[0-9]+ (\[(trainer|runtime) [0-9]/|CACHED|DONE [0-9.]+s)' | awk '!seen[$0]++' | grep -B1 -E 'CACHED|DONE [1-9][0-9]*\.[0-9]s' | grep -v '^--'
+#10 DONE 0.2s
+#9 DONE 1.1s
+#9 DONE 1.5s
+#17 [trainer 4/8] RUN pip install -r requirements-train.txt
+#16 DONE 13.9s
+#17 DONE 15.5s
+#21 [trainer 8/8] RUN python -m training.train --data-path data/raw/breast_cancer.csv         --output-dir artifacts --model-version "1.0.0"
+#21 DONE 4.7s
+#23 DONE 0.0s
+#25 DONE 5.3s
+#24 DONE 14.6s
+#26 DONE 47.6s
+
