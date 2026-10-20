@@ -3,3 +3,4 @@
 -r requirements-serve.txt
 dvc==3.63.0
 httpx==0.28.1
+pathspec==0.12.1  # dvc 3.63 is incompatible with pathspec 1.x
