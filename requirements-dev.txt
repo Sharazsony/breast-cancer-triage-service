@@ -1,0 +1,5 @@
+# Local tooling: DVC plus everything needed to train and serve outside Docker.
+-r requirements-train.txt
+-r requirements-serve.txt
+dvc==3.63.0
+httpx==0.28.1

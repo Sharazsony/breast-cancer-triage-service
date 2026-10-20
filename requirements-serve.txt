@@ -1,0 +1,20 @@
+# Serving dependencies (the only Python packages in the final image).
+# scikit-learn MUST match requirements-train.txt exactly.
+scikit-learn==1.7.2
+numpy==2.5.4
+scipy==1.18.1
+joblib==1.6.0
+threadpoolctl==3.7.0
+fastapi==0.118.0
+starlette==0.48.0
+pydantic==2.14.1
+pydantic_core==2.50.1
+annotated-types==0.8.0
+typing-inspection==0.4.4
+typing_extensions==4.16.0
+anyio==4.15.1
+idna==3.20
+uvicorn==0.37.0
+click==8.5.0
+h11==0.16.0
+redis==6.4.0

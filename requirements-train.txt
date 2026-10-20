@@ -1,0 +1,13 @@
+# Training-only dependencies (used in the Docker training stage).
+# scikit-learn MUST match requirements-serve.txt exactly.
+scikit-learn==1.7.2
+numpy==2.5.4
+scipy==1.18.1
+joblib==1.6.0
+threadpoolctl==3.7.0
+pandas==2.3.3
+python-dateutil==2.9.0.post0
+pytz==2026.5
+tzdata==2026.5
+six==1.17.0
+PyYAML==6.0.3

@@ -1,0 +1,12 @@
+sharaz-sony@sharazlab:/home/sharaz-sony/MLOps_Assignment2/breast-cancer-triage-service$ docker run hello-world
+Unable to find image 'hello-world:latest' locally
+docker: Error response from daemon: authentication required - personal access token is expired
+
+Run 'docker run --help' for more information
+
+sharaz-sony@sharazlab:/home/sharaz-sony/MLOps_Assignment2/breast-cancer-triage-service$ docker run hello-world
+Unable to find image 'hello-world:latest' locally
+docker: Error response from daemon: authentication required - personal access token is expired
+
+Run 'docker run --help' for more information
+

@@ -1,0 +1,14 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Secrets / local config
+.env
+
+# Model artifacts and metrics are produced by the DVC pipeline (not committed)
+/artifacts
+
+# Data is tracked by DVC, never by Git
+/data/raw/breast_cancer.csv
