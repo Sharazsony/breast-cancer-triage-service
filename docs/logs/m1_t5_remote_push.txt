@@ -1,0 +1,18 @@
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ dvc remote add -d localremote dvc-remote
+Setting 'localremote' as a default remote.
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ cat .dvc/config
+[core]
+    remote = localremote
+['remote "localremote"']
+    url = ../dvc-remote
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ dvc push
+1 file pushed
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ find dvc-remote -type f
+dvc-remote/files/md5/b1/54f6a78a166306105a372ea2344899
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ git add .dvc/config dvc-remote && git commit -q -m 'Milestone 1: configure local DVC remote (dvc-remote/) and push v1' && git log --oneline -1
+a7f9564 Milestone 1: configure local DVC remote (dvc-remote/) and push v1
+

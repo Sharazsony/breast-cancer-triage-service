@@ -1,0 +1,12 @@
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ python -m training.prepare_data
+Wrote data/raw/breast_cancer.csv: 569 rows, 30 features + target, 0 nulls
+target
+benign       357
+malignant    212
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ head -c 400 data/raw/breast_cancer.csv; echo
+mean_radius,mean_texture,mean_perimeter,mean_area,mean_smoothness,mean_compactness,mean_concavity,mean_concave_points,mean_symmetry,mean_fractal_dimension,radius_error,texture_error,perimeter_error,area_error,smoothness_error,compactness_error,concavity_error,concave_points_error,symmetry_error,fractal_dimension_error,worst_radius,worst_texture,worst_perimeter,worst_area,worst_smoothness,worst_com
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ wc -l data/raw/breast_cancer.csv
+570 data/raw/breast_cancer.csv
+

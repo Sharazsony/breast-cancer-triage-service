@@ -1,0 +1,38 @@
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ python -m training.prepare_data --drop-last 30
+Wrote data/raw/breast_cancer.csv: 539 rows, 30 features + target, 0 nulls
+target
+benign       333
+malignant    206
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ dvc add data/raw/breast_cancer.csv
+
+To track the changes with git, run:
+
+	git add data/raw/breast_cancer.csv.dvc
+
+To enable auto staging, run:
+
+	dvc config core.autostage true
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ git diff data/raw/breast_cancer.csv.dvc
+diff --git a/data/raw/breast_cancer.csv.dvc b/data/raw/breast_cancer.csv.dvc
+index 4bcb4d6..7e420eb 100644
+--- a/data/raw/breast_cancer.csv.dvc
++++ b/data/raw/breast_cancer.csv.dvc
+@@ -1,5 +1,5 @@
+ outs:
+-- md5: b154f6a78a166306105a372ea2344899
+-  size: 121385
++- md5: 10ef622c5b4c77b4b86abcb40eb024e6
++  size: 115096
+   hash: md5
+   path: breast_cancer.csv
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ dvc push
+1 file pushed
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ git add data/raw/breast_cancer.csv.dvc dvc-remote && git commit -q -m 'Milestone 1: dataset v2 - corrected export without last 30 rows (539 rows)' && git log --oneline -3
+9b35faf Milestone 1: dataset v2 - corrected export without last 30 rows (539 rows)
+a7f9564 Milestone 1: configure local DVC remote (dvc-remote/) and push v1
+c395163 Milestone 1: track dataset v1 (569 rows) with DVC
+

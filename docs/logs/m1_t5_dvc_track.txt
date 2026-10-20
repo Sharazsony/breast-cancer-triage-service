@@ -1,0 +1,51 @@
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ dvc init
+Initialized DVC repository.
+
+You can now commit the changes to git.
+
++---------------------------------------------------------------------+
+|                                                                     |
+|        DVC has enabled anonymous aggregate usage analytics.         |
+|     Read the analytics documentation (and how to opt-out) here:     |
+|             <https://dvc.org/doc/user-guide/analytics>              |
+|                                                                     |
++---------------------------------------------------------------------+
+
+What's next?
+------------
+- Check out the documentation: <https://dvc.org/doc>
+- Get help and share ideas: <https://dvc.org/chat>
+- Star us on GitHub: <https://github.com/iterative/dvc>
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ dvc add data/raw/breast_cancer.csv
+
+To track the changes with git, run:
+
+	git add data/raw/breast_cancer.csv.dvc data/raw/.gitignore
+
+To enable auto staging, run:
+
+	dvc config core.autostage true
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ cat data/raw/breast_cancer.csv.dvc
+outs:
+- md5: b154f6a78a166306105a372ea2344899
+  size: 121385
+  hash: md5
+  path: breast_cancer.csv
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ cat data/raw/.gitignore
+/breast_cancer.csv
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ git add .dvc .dvcignore data/raw/breast_cancer.csv.dvc data/raw/.gitignore && git commit -q -m 'Milestone 1: track dataset v1 (569 rows) with DVC' && git log --oneline -1
+c395163 Milestone 1: track dataset v1 (569 rows) with DVC
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ git ls-files data/ .dvc
+.dvc/.gitignore
+.dvc/config
+data/raw/.gitignore
+data/raw/breast_cancer.csv.dvc
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ git check-ignore -v data/raw/breast_cancer.csv
+data/raw/.gitignore:1:/breast_cancer.csv	data/raw/breast_cancer.csv
+

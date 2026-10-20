@@ -1,0 +1,35 @@
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ git log --oneline -- data/raw/breast_cancer.csv.dvc
+9b35faf Milestone 1: dataset v2 - corrected export without last 30 rows (539 rows)
+c395163 Milestone 1: track dataset v1 (569 rows) with DVC
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ git checkout c395163 -- data/raw/breast_cancer.csv.dvc && dvc checkout
+M       data/raw/breast_cancer.csv
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ grep md5 data/raw/breast_cancer.csv.dvc && wc -l data/raw/breast_cancer.csv && echo rows: $(( $(wc -l < data/raw/breast_cancer.csv) - 1 ))
+- md5: b154f6a78a166306105a372ea2344899
+  hash: md5
+570 data/raw/breast_cancer.csv
+rows: 569
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ git checkout HEAD -- data/raw/breast_cancer.csv.dvc && dvc checkout
+M       data/raw/breast_cancer.csv
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ grep md5 data/raw/breast_cancer.csv.dvc && echo rows: $(( $(wc -l < data/raw/breast_cancer.csv) - 1 ))
+- md5: 10ef622c5b4c77b4b86abcb40eb024e6
+  hash: md5
+rows: 539
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ git status --short && dvc status
+?? docs/logs/m1_t5_dvc_track.txt
+?? docs/logs/m1_t5_prepare.txt
+?? docs/logs/m1_t5_remote_push.txt
+?? docs/logs/m1_t5_restore.txt
+?? docs/logs/m1_t6_switch.txt
+?? docs/logs/m1_t6_v2.txt
+?? docs/screenshots/m1_t5_dvc_track.png
+?? docs/screenshots/m1_t5_prepare.png
+?? docs/screenshots/m1_t5_remote_push.png
+?? docs/screenshots/m1_t5_restore.png
+?? docs/screenshots/m1_t6_v2.png
+Data and pipelines are up to date.
+

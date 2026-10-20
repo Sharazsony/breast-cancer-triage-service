@@ -1,0 +1,28 @@
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ rm -f data/raw/breast_cancer.csv && rm -rf .dvc/cache
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ ls -la data/raw/ ; ls .dvc/
+total 16
+drwxrwxr-x 2 sharaz-sony sharaz-sony 4096 Oct 20 11:58 .
+drwxrwxr-x 3 sharaz-sony sharaz-sony 4096 Oct 20 11:53 ..
+-rw-rw-r-- 1 sharaz-sony sharaz-sony   19 Oct 20 11:58 .gitignore
+-rw-rw-r-- 1 sharaz-sony sharaz-sony   99 Oct 20 11:58 breast_cancer.csv.dvc
+config
+tmp
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ dvc status -c
+	deleted:            data/raw/breast_cancer.csv
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ dvc pull
+A       data/raw/breast_cancer.csv
+1 file fetched and 1 file added
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ ls -la data/raw/ && wc -l data/raw/breast_cancer.csv && md5sum data/raw/breast_cancer.csv
+total 136
+drwxrwxr-x 2 sharaz-sony sharaz-sony   4096 Oct 20 11:58 .
+drwxrwxr-x 3 sharaz-sony sharaz-sony   4096 Oct 20 11:53 ..
+-rw-rw-r-- 1 sharaz-sony sharaz-sony     19 Oct 20 11:58 .gitignore
+-rw-rw-r-- 1 sharaz-sony sharaz-sony 121385 Oct 20 11:58 breast_cancer.csv
+-rw-rw-r-- 1 sharaz-sony sharaz-sony     99 Oct 20 11:58 breast_cancer.csv.dvc
+570 data/raw/breast_cancer.csv
+b154f6a78a166306105a372ea2344899  data/raw/breast_cancer.csv
+
