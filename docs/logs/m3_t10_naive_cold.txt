@@ -1,0 +1,181 @@
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ time docker build --no-cache --progress=plain -f Dockerfile.naive -t breast-cancer-triage-api:naive . 2>&1 | grep -E '^#[0-9]+ \[|DONE [0-9.]+s|naming to|PASS|selected|ERROR'
+#1 [internal] load build definition from Dockerfile.naive
+#1 DONE 0.0s
+#2 [internal] load metadata for docker.io/library/ubuntu:24.04
+#3 [auth] library/ubuntu:pull token for registry-1.docker.io
+#3 DONE 0.0s
+#2 [internal] load metadata for docker.io/library/ubuntu:24.04
+#2 DONE 3.0s
+#4 [internal] load .dockerignore
+#4 DONE 0.0s
+#5 [internal] load build context
+#5 DONE 0.0s
+#6 [1/6] FROM docker.io/library/ubuntu:24.04@sha256:68ee22004a9109b44973313b02ff7b1de250f1de0f5ecb628d73f579aaff33ac
+#5 [internal] load build context
+#5 DONE 0.1s
+#6 [1/6] FROM docker.io/library/ubuntu:24.04@sha256:68ee22004a9109b44973313b02ff7b1de250f1de0f5ecb628d73f579aaff33ac
+#6 DONE 3.9s
+#7 [2/6] RUN apt-get update && apt-get install -y python3 python3-pip
+#7 27.75 Selecting previously unselected package liblocale-gettext-perl.
+#7 27.83 Selecting previously unselected package libpython3.12-minimal:amd64.
+#7 27.99 Selecting previously unselected package libexpat1:amd64.
+#7 28.05 Selecting previously unselected package python3.12-minimal.
+#7 29.62 Selecting previously unselected package python3-minimal.
+#7 29.67 Selecting previously unselected package media-types.
+#7 29.72 Selecting previously unselected package netbase.
+#7 29.77 Selecting previously unselected package tzdata.
+#7 29.91 Selecting previously unselected package readline-common.
+#7 29.96 Selecting previously unselected package libreadline8t64:amd64.
+#7 30.04 Selecting previously unselected package libsqlite3-0:amd64.
+#7 30.11 Selecting previously unselected package libpython3.12-stdlib:amd64.
+#7 30.23 Selecting previously unselected package python3.12.
+#7 30.28 Selecting previously unselected package libpython3-stdlib:amd64.
+#7 30.59 Selecting previously unselected package python3.
+#7 30.65 Selecting previously unselected package perl-modules-5.38.
+#7 30.91 Selecting previously unselected package libgdbm6t64:amd64.
+#7 30.97 Selecting previously unselected package libgdbm-compat4t64:amd64.
+#7 31.01 Selecting previously unselected package libperl5.38t64:amd64.
+#7 31.22 Selecting previously unselected package perl.
+#7 31.28 Selecting previously unselected package adduser.
+#7 31.40 Selecting previously unselected package openssl.
+#7 31.48 Selecting previously unselected package ca-certificates.
+#7 31.55 Selecting previously unselected package libbsd0:amd64.
+#7 31.60 Selecting previously unselected package python3-pkg-resources.
+#7 31.65 Selecting previously unselected package libjansson4:amd64.
+#7 31.70 Selecting previously unselected package libpng16-16t64:amd64.
+#7 31.74 Selecting previously unselected package libxau6:amd64.
+#7 31.79 Selecting previously unselected package libxdmcp6:amd64.
+#7 31.84 Selecting previously unselected package libxcb1:amd64.
+#7 31.88 Selecting previously unselected package libx11-data.
+#7 31.95 Selecting previously unselected package libx11-6:amd64.
+#7 31.99 Selecting previously unselected package manpages.
+#7 32.05 Selecting previously unselected package xz-utils.
+#7 32.09 Selecting previously unselected package binutils-common:amd64.
+#7 32.14 Selecting previously unselected package libsframe1:amd64.
+#7 32.19 Selecting previously unselected package libbinutils:amd64.
+#7 32.24 Selecting previously unselected package libctf-nobfd0:amd64.
+#7 32.29 Selecting previously unselected package libctf0:amd64.
+#7 32.34 Selecting previously unselected package libgprofng0:amd64.
+#7 32.40 Selecting previously unselected package binutils-x86-64-linux-gnu.
+#7 32.56 Selecting previously unselected package binutils.
+#7 32.61 Selecting previously unselected package libc-dev-bin.
+#7 32.66 Selecting previously unselected package linux-libc-dev:amd64.
+#7 32.84 Selecting previously unselected package libcrypt-dev:amd64.
+#7 32.88 Selecting previously unselected package rpcsvc-proto.
+#7 32.92 Selecting previously unselected package libc6-dev:amd64.
+#7 33.07 Selecting previously unselected package gcc-13-base:amd64.
+#7 33.12 Selecting previously unselected package libisl23:amd64.
+#7 33.18 Selecting previously unselected package libmpfr6:amd64.
+#7 33.23 Selecting previously unselected package libmpc3:amd64.
+#7 33.27 Selecting previously unselected package cpp-13-x86-64-linux-gnu.
+#7 33.48 Selecting previously unselected package cpp-13.
+#7 33.51 Selecting previously unselected package cpp-x86-64-linux-gnu.
+#7 33.57 Selecting previously unselected package cpp.
+#7 33.62 Selecting previously unselected package libcc1-0:amd64.
+#7 33.67 Selecting previously unselected package libgomp1:amd64.
+#7 33.73 Selecting previously unselected package libitm1:amd64.
+#7 33.81 Selecting previously unselected package libatomic1:amd64.
+#7 33.89 Selecting previously unselected package libasan8:amd64.
+#7 34.03 Selecting previously unselected package liblsan0:amd64.
+#7 34.12 Selecting previously unselected package libtsan2:amd64.
+#7 34.21 Selecting previously unselected package libubsan1:amd64.
+#7 34.27 Selecting previously unselected package libhwasan0:amd64.
+#7 34.35 Selecting previously unselected package libquadmath0:amd64.
+#7 34.40 Selecting previously unselected package libgcc-13-dev:amd64.
+#7 34.54 Selecting previously unselected package gcc-13-x86-64-linux-gnu.
+#7 34.92 Selecting previously unselected package gcc-13.
+#7 34.96 Selecting previously unselected package gcc-x86-64-linux-gnu.
+#7 35.01 Selecting previously unselected package gcc.
+#7 35.05 Selecting previously unselected package libstdc++-13-dev:amd64.
+#7 35.23 Selecting previously unselected package g++-13-x86-64-linux-gnu.
+#7 35.49 Selecting previously unselected package g++-13.
+#7 35.53 Selecting previously unselected package g++-x86-64-linux-gnu.
+#7 35.57 Selecting previously unselected package g++.
+#7 35.61 Selecting previously unselected package make.
+#7 35.65 Selecting previously unselected package libdpkg-perl.
+#7 35.71 Selecting previously unselected package bzip2.
+#7 35.79 Selecting previously unselected package patch.
+#7 35.84 Selecting previously unselected package lto-disabled-list.
+#7 35.88 Selecting previously unselected package dpkg-dev.
+#7 35.94 Selecting previously unselected package build-essential.
+#7 35.98 Selecting previously unselected package gpgconf.
+#7 36.03 Selecting previously unselected package libksba8:amd64.
+#7 36.07 Selecting previously unselected package libsasl2-modules-db:amd64.
+#7 36.12 Selecting previously unselected package libsasl2-2:amd64.
+#7 36.17 Selecting previously unselected package libldap2:amd64.
+#7 36.22 Selecting previously unselected package dirmngr.
+#7 36.28 Selecting previously unselected package libfakeroot:amd64.
+#7 36.35 Selecting previously unselected package fakeroot.
+#7 36.40 Selecting previously unselected package fonts-dejavu-mono.
+#7 36.46 Selecting previously unselected package fonts-dejavu-core.
+#7 36.54 Selecting previously unselected package fontconfig-config.
+#7 36.81 Selecting previously unselected package gnupg-utils.
+#7 36.86 Selecting previously unselected package gpg.
+#7 36.91 Selecting previously unselected package pinentry-curses.
+#7 36.99 Selecting previously unselected package gpg-agent.
+#7 37.05 Selecting previously unselected package gpgsm.
+#7 37.11 Selecting previously unselected package keyboxd.
+#7 37.15 Selecting previously unselected package gnupg.
+#7 37.19 Selecting previously unselected package gnupg-l10n.
+#7 37.24 Selecting previously unselected package gpg-wks-client.
+#7 37.30 Selecting previously unselected package javascript-common.
+#7 37.35 Selecting previously unselected package libalgorithm-diff-perl.
+#7 37.40 Selecting previously unselected package libalgorithm-diff-xs-perl:amd64.
+#7 37.46 Selecting previously unselected package libalgorithm-merge-perl.
+#7 37.53 Selecting previously unselected package libaom3:amd64.
+#7 37.68 Selecting previously unselected package libbrotli1:amd64.
+#7 37.74 Selecting previously unselected package libfreetype6:amd64.
+#7 37.79 Selecting previously unselected package libfontconfig1:amd64.
+#7 37.85 Selecting previously unselected package libsharpyuv0:amd64.
+#7 37.90 Selecting previously unselected package libheif-plugin-aomdec:amd64.
+#7 37.95 Selecting previously unselected package libheif1:amd64.
+#7 38.00 Selecting previously unselected package libjpeg-turbo8:amd64.
+#7 38.05 Selecting previously unselected package libjpeg8:amd64.
+#7 38.11 Selecting previously unselected package libdeflate0:amd64.
+#7 38.15 Selecting previously unselected package libjbig0:amd64.
+#7 38.20 Selecting previously unselected package liblerc4:amd64.
+#7 38.25 Selecting previously unselected package libwebp7:amd64.
+#7 38.30 Selecting previously unselected package libtiff6:amd64.
+#7 38.35 Selecting previously unselected package libxpm4:amd64.
+#7 38.40 Selecting previously unselected package libgd3:amd64.
+#7 38.44 Selecting previously unselected package libc-devtools.
+#7 38.49 Selecting previously unselected package libexpat1-dev:amd64.
+#7 38.57 Selecting previously unselected package libfile-fcntllock-perl.
+#7 38.61 Selecting previously unselected package libheif-plugin-aomenc:amd64.
+#7 38.68 Selecting previously unselected package libjs-jquery.
+#7 38.73 Selecting previously unselected package libjs-underscore.
+#7 38.77 Selecting previously unselected package libjs-sphinxdoc.
+#7 38.81 Selecting previously unselected package libldap-common.
+#7 38.87 Selecting previously unselected package libpython3.12t64:amd64.
+#7 38.96 Selecting previously unselected package zlib1g-dev:amd64.
+#7 39.04 Selecting previously unselected package libpython3.12-dev:amd64.
+#7 39.30 Selecting previously unselected package libpython3-dev:amd64.
+#7 39.36 Selecting previously unselected package libsasl2-modules:amd64.
+#7 39.40 Selecting previously unselected package manpages-dev.
+#7 39.55 Selecting previously unselected package python3.12-dev.
+#7 39.59 Selecting previously unselected package python3-dev.
+#7 39.63 Selecting previously unselected package python3-setuptools.
+#7 39.70 Selecting previously unselected package python3-wheel.
+#7 39.75 Selecting previously unselected package python3-pip.
+#7 DONE 50.8s
+#8 [3/6] WORKDIR /app
+#8 DONE 0.2s
+#9 [4/6] COPY . .
+#9 DONE 0.1s
+#10 [5/6] RUN pip3 install --break-system-packages --ignore-installed -r requirements-train.txt -r requirements-serve.txt
+#10 DONE 53.3s
+#11 [6/6] RUN python3 -m training.train --data-path data/raw/breast_cancer.csv --output-dir artifacts --model-version 1.0.0
+#11 6.247 logistic_regression       0.9697   0.9791   0.9934       0.9512    0.9722    0.9985  <== selected
+#11 6.247 PASS: test malignant recall 0.9512 >= 0.95
+#11 DONE 6.5s
+#12 naming to docker.io/library/breast-cancer-triage-api:naive done
+#12 DONE 54.8s
+
+real	2m52.937s
+user	0m0.653s
+sys	0m0.394s
+
+sharaz-sony@sharazlab:~/MLOps_Assignment2/breast-cancer-triage-service$ docker images breast-cancer-triage-api:naive --format 'table {{.Repository}}\t{{.Tag}}\t{{.Size}}'
+REPOSITORY                 TAG       SIZE
+breast-cancer-triage-api   naive     1.46GB
+

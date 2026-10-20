@@ -49,7 +49,7 @@ async def lifespan(app: FastAPI):
     if app.state.card.get("feature_names", FEATURE_NAMES) != FEATURE_NAMES:
         raise RuntimeError("Model feature order does not match the API schema")
     app.state.predictions_served = 0
-    logger.info("Loaded model %s from %s (threshold=%s)",
+    logger.info("Model ready: %s loaded from %s (threshold=%s)",
                 app.state.card.get("model_family"), model_path, settings.decision_threshold)
     yield
 
